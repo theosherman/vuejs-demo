@@ -1,0 +1,10 @@
+{
+  "users": [
+    { "id": 1, "fname": "Theo", "lname": "Sherman", "username": "tsherman" },
+    { "id": 2, "fname": "Zac", "lname": "Kamm", "username": "zkamm" },
+    { "id": 3, "fname": "David", "lname": "Byrne", "username": "dbyrne" },
+    { "id": 4, "fname": "Scott", "lname": "Harban", "username": "sharban" },
+    { "id": 5, "fname": "Gary", "lname": "Weston", "username": "gweston" },
+    { "id": 6, "fname": "Luke", "lname": "Irvin", "username": "lirvin" }
+  ]
+}
