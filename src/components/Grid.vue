@@ -2,7 +2,7 @@
 div
 	h1 Grid
 
-	input.form-control(type="text", v-model="searchText", class="pull-right col-md-3", placeholder="Search")
+	input.form-control(type='text', v-model='searchText', placeholder='Search')
 
 	table.table
 		thead
@@ -10,11 +10,31 @@ div
 				th First Name
 				th Last Name
 				th Username
+				th
 		tbody
-			tr(v-for="x in paginatedData")
+
+			tr(v-for='x in paginatedData')
 				td {{ x.fname }}
 				td {{ x.lname }}
 				td {{ x.username }}
+				td
+					button.btn.btn-xs.btn-danger
+						i.fa.fa-trash
+
+			tr(v-if='input.fname.length > 0 || input.lname.length > 0 || input.username.length > 0')
+				td {{ input.fname }}
+				td {{ input.lname }}
+				td {{ input.username }}
+
+			tr
+				td
+					input.form-control(type='text', v-model='input.fname', placeholder='First Name')
+				td
+					input.form-control(type='text', v-model='input.lname', placeholder='Last Name')
+				td
+					input.form-control(type='text', v-model='input.username', placeholder='Username')
+				td
+					button.btn.btn-default(@click='addItem') Add
 </template>
 
 <script>
@@ -38,9 +58,28 @@ export default {
   data: () => ({
     searchText: '',
     sortColumn: 'fname',
+		input: {
+			fname: '',
+			lname: '',
+			username: ''
+		},
     pageNum: 0,
     tableData: []
   }),
+	methods: {
+		addItem() {
+			http.post('/users', this.input).then((response) => {
+				http.get('/users').then((response) => {
+		      this.tableData = response.data
+		    }).catch((err) => {
+		      console.log(err)
+		    })
+				this.input.fname = ''
+				this.input.lname = ''
+				this.input.username = ''
+			})
+		}
+	},
   computed: {
     paginatedData () {
       return paginateRows(this.sortedData, this.pageNum)
