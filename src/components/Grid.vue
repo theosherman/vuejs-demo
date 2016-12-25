@@ -1,6 +1,9 @@
 <template lang="pug">
 div
+	h1 Grid
+
 	input.form-control(type="text", v-model="searchText", class="pull-right col-md-3", placeholder="Search")
+
 	table.table
 		thead
 			tr

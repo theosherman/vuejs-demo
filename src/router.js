@@ -7,7 +7,8 @@ const router = new VueRouter({
   linkActiveClass: 'active',
   routes: [
     { path: '/', component: require('./components/Home.vue') },
-    { path: '/grid', component: require('./components/Grid.vue') }
+    { path: '/grid', component: require('./components/Grid.vue') },
+    { path: '/form', component: require('./components/Form.vue') }
   ]
 })
 

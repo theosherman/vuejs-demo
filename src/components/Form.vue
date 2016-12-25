@@ -1,7 +1,6 @@
 <template lang="pug">
 div
-  h1 Home Sweet Home
-  h3.text-muted This demo will demonstrate the power of Vue.js
+  h1 Form
 </template>
 
 <script>
