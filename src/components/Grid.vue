@@ -67,17 +67,15 @@ export default {
     tableData: []
   }),
 	methods: {
-		addItem() {
-			http.post('/users', this.input).then((response) => {
-				http.get('/users').then((response) => {
-		      this.tableData = response.data
-		    }).catch((err) => {
-		      console.log(err)
-		    })
-				this.input.fname = ''
-				this.input.lname = ''
-				this.input.username = ''
-			})
+		async addItem() {
+			try {
+				await http.post('/users', this.input)
+				var response = await http.get('/users')
+				this.tableData = response.data
+				this.input.fname = this.input.lname = this.input.username = ''
+			} catch (e) {
+				console.log(e)
+			}
 		}
 	},
   computed: {
