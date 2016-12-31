@@ -1,7 +1,7 @@
 <template lang="pug">
 div
-	h1 Grid
 
+	h1 Grid
 	input.form-control(type='text', v-model='searchText', placeholder='Search')
 
 	table.table
@@ -12,7 +12,6 @@ div
 				th Username
 				th
 		tbody
-
 			tr(v-for='x in paginatedData')
 				td {{ x.fname }}
 				td {{ x.lname }}
@@ -25,6 +24,7 @@ div
 				td {{ input.fname }}
 				td {{ input.lname }}
 				td {{ input.username }}
+				td
 
 			tr
 				td
