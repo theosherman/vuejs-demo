@@ -1,15 +1,5 @@
 <template lang="pug">
-mixin textbox(label, binding, inputType)
-  .form-group(:class="{ 'has-error': $v." + binding + ".$error }")
-    label.control-label.col-sm-2(for=binding)= label
-    .col-sm-10
-      input.form-control(type=inputType ? inputType : 'text', v-model.trim=binding, id=binding, @input='$v.' + binding + '.$touch()', placeholder=label)
-
-mixin validation(binding, validation, message)
-  .col-sm-10.col-sm-offset-2.validation-message(v-show=("!$v." + binding + "." + validation + " && $v." + binding + ".$error === true"))= message
-
-mixin button(label, clickAction, buttonType)
-  button.btn(class="btn-" + (buttonType ? buttonType : "default"), @click=clickAction)&attributes(attributes)= label
+include ../FormHelpers.pug
 
 div
   h1 Form
@@ -29,10 +19,10 @@ div
     +validation('email', 'email', 'Email is invalid')
 
     +textbox('Age', 'age')
-    +validation('age', 'tooYoung', 'Age needs to be 18+')
-    +validation('age', 'tooOld', 'Too damn old!')
+    +validation('age', 'isAdult', 'Age needs to be 18+')
+    +validation('age', 'notTooOld', 'Too damn old!')
 
-    +button('Sign up!', 'save()', 'primary')(class="pull-right", :class="{'disabled': $v.$invalid === true}")
+    +button('Sign up!', 'save()', 'success')(class="pull-right", :class="{'disabled': $v.$invalid === true}")
 
 </template>
 
@@ -49,16 +39,19 @@ export default {
   }),
   methods: {
     save() {
-      if (this.$v.$invalid === false)
-        alert('Saved!')
+      if (this.$v.$invalid === true)
+        return
+      alert('Saved!')
+      this.username = ''
+      this.name = ''
+      this.email = ''
+      this.age = ''
+      this.$v.$reset()
     }
   },
   validations: {
     name: { required, minLength: minLength(4) },
-    age: {
-      tooYoung: (age) => !(age < 18),
-      tooOld: (age) => !(age > 100)
-      },
+    age: { isAdult: (age) => age >= 18, notTooOld: (age) => age < 120 },
     username: {
       required,
       async isUnique (username)  {
