@@ -1,11 +1,11 @@
 <template lang="pug">
-.container
-  .row
-    .col-md-4
-      button.btn.btn-default(@click="toggleMessage()") {{ buttonText }}
-    .col-md-8
-      .alert.alert-info(v-if="hide === false")
-        h1 {{ message }}
+.row
+  .col-md-4
+    button.btn.btn-lg(@click="toggleMessage()", :class="buttonStyle") {{ buttonText }}
+  .col-md-8
+    .alert.alert-info(v-if="hide === false")
+      input.form-control.input-lg(v-model="message")
+      h1.text-center {{ message }}
 </template>
 
 <script>
@@ -24,7 +24,10 @@ export default {
 
   computed: {
     buttonText() {
-      return this.hide ? 'Show' : 'Hide'
+        return this.hide ? 'Show' : 'Hide'
+    },
+    buttonStyle() {
+      return { 'btn-success': this.hide, 'btn-warning': !this.hide }
     }
   }
 
