@@ -13,9 +13,11 @@ div
 
 <script>
 import router from './router'
+import store from './store'
 
 export default {
   router,
+  store,
   name: 'app',
   components: {
     'side-nav': require('./components/SideNav.vue')
