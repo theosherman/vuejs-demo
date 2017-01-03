@@ -13,13 +13,13 @@ export default {
 
   mutations: {
     setMessage(state, message) {
-      state.stateManagement.message = message
+      state.message = message
     }
   },
 
   getters: {
     getMessage: state => {
-      return state.stateManagement.message
+      return state.message
     }
   }
 

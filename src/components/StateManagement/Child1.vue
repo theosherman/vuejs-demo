@@ -2,7 +2,7 @@
 .panel.panel-default
   .panel-heading Child 1
   .panel-body
-    input.form-control(type="text", v-model="message", @input="setMessage")
+    input.form-control(type="text", :value="message", @input="setMessage")
     h2 {{ message }}
 </template>
 
