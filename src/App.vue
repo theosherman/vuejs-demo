@@ -1,8 +1,6 @@
 <template lang="pug">
 div
-  .container
-    h1 Vue.JS Demo
-  hr
+  navbar
   .container
     .row
       .col-md-3
@@ -20,6 +18,7 @@ export default {
   store,
   name: 'app',
   components: {
+    'navbar': require('./components/Navbar'),
     'side-nav': require('./components/SideNav.vue')
   }
 }
