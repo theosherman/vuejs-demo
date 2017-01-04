@@ -10,7 +10,7 @@ const router = new VueRouter({
     { path: '/databinding', component: require('./components/DataBinding.vue') },
     { path: '/grid', component: require('./components/Grid.vue') },
     { path: '/form', component: require('./components/Form.vue') },
-    { path: '/statemanagement', component: require('./components/StateManagement/Parent.vue') },
+    { path: '/statemanagement', component: require('./components/StateManagement.vue') },
   ]
 })
 
