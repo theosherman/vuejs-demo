@@ -28,6 +28,7 @@ export default {
     control.on("change", (e) => {
       this.selection = e.target.value;
     })
+    this.selection = control[0].value;
   }
 }
 </script>
