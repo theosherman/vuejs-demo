@@ -12,6 +12,7 @@ const router = new VueRouter({
     { path: '/form', component: require('./components/Form.vue') },
     { path: '/statemanagement', component: require('./components/StateManagement.vue') },
     { path: '/jquery', component: require('./components/Jquery.vue') },
+    { path: '/modal', component: require('./components/Modal.vue') },
   ]
 })
 
