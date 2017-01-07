@@ -7,4 +7,5 @@
   router-link.list-group-item(to="/statemanagement") State Management
   router-link.list-group-item(to="/jquery") JQuery Integration
   router-link.list-group-item(to="/modal") Modal
+  router-link.list-group-item(to="/secureroute") Secure Route
 </template>
