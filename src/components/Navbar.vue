@@ -1,6 +1,6 @@
 <template lang="pug">
 nav.navbar.navbar-inverse
-  .container-fluid
+  .container
     
     .navbar-header
       a.navbar-brand(href="#")
@@ -8,7 +8,9 @@ nav.navbar.navbar-inverse
         | &nbsp;&nbsp;Vue.JS Demo
 
     .navbar-right
-      p.navbar-text Welcome, {{ displayName }}
+      p.navbar-text
+        i.fa.fa-user
+        | &nbsp;{{ displayName }}
 </template>
 
 <script>

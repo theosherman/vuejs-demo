@@ -14,7 +14,6 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
-    "await-to-js": "^1.0.0",
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "font-awesome": "^4.7.0",

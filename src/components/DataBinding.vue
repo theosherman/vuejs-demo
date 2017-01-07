@@ -2,35 +2,39 @@
 div
   h1 Data Binding
   hr
+  pre {{ data }}
+
   .row
-    .col-md-4
+    .col-md-3
       button.btn.btn-lg(@click="toggleMessage()", :class="buttonStyle") {{ buttonText }}
-    .col-md-8
-      .alert.alert-info(v-if="hide === false")
-        input.form-control.input-lg(v-model="message")
-        h1.text-center {{ message }}
+    .col-md-9
+      .alert.alert-info(v-if="data.hide === false")
+        input.form-control.input-lg(v-model="data.message")
+        h1.text-center {{ data.message }}
 </template>
 
 <script>
 export default {
 
   data: () => ({
-    message: 'Hello world!',
-    hide: false
+    data: {
+      message: 'Hello world!',
+      hide: false
+    }
   }),
 
   methods: {
     toggleMessage() {
-      this.hide = !this.hide
+      this.data.hide = !this.data.hide
     }
   },
 
   computed: {
     buttonText() {
-        return this.hide ? 'Show' : 'Hide'
+        return this.data.hide ? 'Show' : 'Hide'
     },
     buttonStyle() {
-      return { 'btn-success': this.hide, 'btn-warning': !this.hide }
+      return { 'btn-default': this.data.hide, 'btn-warning': !this.data.hide }
     }
   }
 

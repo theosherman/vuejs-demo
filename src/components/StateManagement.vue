@@ -2,11 +2,14 @@
 div
   h1 State Management
   hr
-  h3 Current value of displayName: "{{ displayName }}"
+  pre {{ $store.state }}
 
-  .form-horizontal
-    input.form-control(v-model="nameInput", placeholder = "Name")
-    button.btn.btn-primary(@click="setDisplayName(nameInput)") Set
+  .input-group
+    input.form-control(v-model.trim="nameInput", @keyup.enter="setDisplayName(nameInput)", placeholder = "displayName")
+    .input-group-btn
+      button.btn.btn-success(@click="setDisplayName(nameInput)")
+        i.fa.fa-save
+        | &nbsp;Save
 </template>
 
 <script>
@@ -21,10 +24,6 @@ export default {
   methods: {
     ...mapMutations('auth', ['setDisplayName'])
   },
-
-  computed: {
-    ...mapState('auth', { displayName: state => state.displayName })
-  }
 
 }
 </script>
