@@ -3,7 +3,8 @@ include ../FormHelpers.pug
 
 div
   h1 Form
-
+  hr
+    
   .form-horizontal
 
     +textbox('Username', 'username')
