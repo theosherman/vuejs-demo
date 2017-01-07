@@ -3,7 +3,7 @@ export default {
   namespaced: true,
 
   state: {
-    displayName: 'Scott Kamm'
+    displayName: 'Theo'
   },
 
   mutations: {
