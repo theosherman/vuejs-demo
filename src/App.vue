@@ -26,6 +26,7 @@ export default {
 
 <style lang="less">
 @import "~bootstrap/less/bootstrap";
+@import "~bootstrap/less/theme";
 @import "~font-awesome/less/font-awesome";
 
 @gray-base:             #000;

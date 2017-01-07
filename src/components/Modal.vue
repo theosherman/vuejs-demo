@@ -23,11 +23,4 @@ div
 <script>
 require('expose?$!expose?jQuery!jquery');
 require('bootstrap')
-
-export default {
-  data: () => ({}),
-  methods: {},
-  computed: {},
-  components: {}
-}
 </script>
