@@ -1,44 +1,74 @@
 <template lang="pug">
 div
 
-	h1 Grid
-	input.form-control(type='text', v-model='searchText', placeholder='Search')
+  h1 Grid
+  hr
 
-	table.table
-		thead
-			tr
-				th First Name
-				th Last Name
-				th Username
-				th
-		tbody
-			tr(v-for='x in paginatedData')
-				td {{ x.fname }}
-				td {{ x.lname }}
-				td {{ x.username }}
-				td
-					button.btn.btn-xs.btn-danger
-						i.fa.fa-trash
+  .row
+    .col-md-4
+      input.form-control.input-sm(type='text', v-model='searchText', placeholder='Search')
+    .col-md-8
+      div.pull-right
+        button.btn.btn-default.btn-sm(@click="edit = !edit")
+          i.fa.fa-pencil
 
-			tr(v-if='input.fname.length > 0 || input.lname.length > 0 || input.username.length > 0')
-				td {{ input.fname }}
-				td {{ input.lname }}
-				td {{ input.username }}
-				td
+  table.table
+    thead
+      tr
+        th ID
+        th First Name
+        th Last Name
+        th Username
+        th(v-if="edit")
+    tbody
+      tr(v-for='x in paginatedData')
+        td {{ x.id }}
+        td
+          span(v-if="!x.edit") {{ x.fname }}
+          span(v-if="x.edit")
+            input.form-control.input-sm(v-model="x.fname")
+        td
+          span(v-if="!x.edit") {{ x.lname }}
+          span(v-if="x.edit")
+            input.form-control.input-sm(v-model="x.lname")
+        td
+          span(v-if="!x.edit") {{ x.username }}
+          span(v-if="x.edit")
+            input.form-control.input-sm(v-model="x.username")
+        td(v-if="edit")
+          .pull-right
+            button.btn.btn-xs.btn-warning.button-spacing(@click="toggleEdit(x)", v-if="!x.edit")
+              i.fa.fa-pencil
+            button.btn.btn-xs.btn-success.button-spacing(@click="updateItem(x)", v-if="x.edit")
+              i.fa.fa-save
+            button.btn.btn-xs.btn-danger.button-spacing(@click="deleteItem(x.id)")
+              i.fa.fa-trash
+            
+      tr(v-if='edit && (input.fname.length > 0 || input.lname.length > 0 || input.username.length > 0)')
+        td
+          i.fa.fa-plus
+        td {{ input.fname }}
+        td {{ input.lname }}
+        td {{ input.username }}
+        td(v-if="edit")
+          .pull-right
+            button.btn.btn-xs.btn-success.button-spacing(@click="addItem")
+              i.fa.fa-save
 
-			tr
-				td
-					input.form-control(type='text', v-model='input.fname', placeholder='First Name')
-				td
-					input.form-control(type='text', v-model='input.lname', placeholder='Last Name')
-				td
-					input.form-control(type='text', v-model='input.username', placeholder='Username')
-				td
-					button.btn.btn-default(@click='addItem') Add
+      tr(v-if="edit")
+        td
+        td
+          input.form-control.input-sm(type='text', v-model='input.fname', placeholder='First Name')
+        td
+          input.form-control.input-sm(type='text', v-model='input.lname', placeholder='Last Name')
+        td
+          input.form-control.input-sm(type='text', v-model='input.username', placeholder='Username')
+        td
 </template>
 
 <script>
 import http from '../http'
+import to from 'await-to-js'
 
 function paginateRows (data, pageNum) {
   return data
@@ -55,29 +85,64 @@ function filterRows (data, searchText) {
 }
 
 export default {
+
   data: () => ({
     searchText: '',
     sortColumn: 'fname',
-		input: {
-			fname: '',
-			lname: '',
-			username: ''
-		},
+    edit: false,
+    input: {
+      fname: '',
+      lname: '',
+      username: ''
+    },
     pageNum: 0,
     tableData: []
   }),
-	methods: {
-		async addItem() {
-			try {
-				await http.post('/users', this.input)
-				var response = await http.get('/users')
-				this.tableData = response.data
-				this.input.fname = this.input.lname = this.input.username = ''
-			} catch (e) {
-				console.log(e)
-			}
-		}
-	},
+
+  methods: {
+    async refresh() {
+      try {
+        const { data } = await http.get('/users')
+        this.tableData = data
+      } catch(err) {
+        this.$toast(err.message)
+      }
+    },
+    toggleEdit(item) {
+      if (!item.edit) {
+        this.$set(item, 'edit')
+        item.edit = false
+      }
+      item.edit = !item.edit
+    },
+    async addItem() {
+      try {
+        await http.post('/users', this.input)
+        this.refresh()
+        this.input.fname = this.input.lname = this.input.username = ''
+      } catch(err) {
+        this.$toast(err.message)
+      }
+    },
+    async updateItem(item) {
+      try {
+        this.$delete(item, 'edit')
+        await http.put(`/users/${item.id}`, item)
+        this.refresh()
+      } catch(err) {
+        this.$toast(err.message)
+      }
+    },
+    async deleteItem(id) {
+      try {
+        await http.delete(`/users/${id}`)
+        this.refresh()
+      } catch(err) {
+        this.$toast(err.message)
+      }
+    }
+  },
+
   computed: {
     paginatedData () {
       return paginateRows(this.sortedData, this.pageNum)
@@ -89,12 +154,16 @@ export default {
       return filterRows(this.tableData, this.searchText)
     }
   },
+
   mounted () {
-    http.get('/users').then((response) => {
-      this.tableData = response.data
-    }).catch((err) => {
-      console.log(err)
-    })
+    this.refresh()
   }
+
 }
 </script>
+
+<style lang="css">
+  .button-spacing {
+    margin-left: 2px;
+  }
+</style>
