@@ -68,7 +68,6 @@ div
 
 <script>
 import http from '../http'
-import to from 'await-to-js'
 
 function paginateRows (data, pageNum) {
   return data
