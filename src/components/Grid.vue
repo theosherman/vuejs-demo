@@ -1,6 +1,5 @@
 <template lang="pug">
 div
-
   h1 Grid
   hr
 
@@ -44,7 +43,7 @@ div
             button.btn.btn-xs.btn-danger.button-spacing(@click="deleteItem(x.id)")
               i.fa.fa-trash
             
-      tr(v-if='edit && (input.fname.length > 0 || input.lname.length > 0 || input.username.length > 0)')
+      tr(v-if='edit && hasInput')
         td
           i.fa.fa-plus
         td {{ input.fname }}
@@ -68,6 +67,7 @@ div
 
 <script>
 import http from '../http'
+import miniToastr from 'mini-toastr'
 
 function paginateRows (data, pageNum) {
   return data
@@ -104,7 +104,7 @@ export default {
         const { data } = await http.get('/users')
         this.tableData = data
       } catch(err) {
-        this.$toast(err.message)
+        miniToastr.error('Unable to fetch table data.', err.message)
       }
     },
     toggleEdit(item) {
@@ -120,7 +120,7 @@ export default {
         this.refresh()
         this.input.fname = this.input.lname = this.input.username = ''
       } catch(err) {
-        this.$toast(err.message)
+        miniToastr.error('Unable to save user.', err.message)
       }
     },
     async updateItem(item) {
@@ -129,7 +129,7 @@ export default {
         await http.put(`/users/${item.id}`, item)
         this.refresh()
       } catch(err) {
-        this.$toast(err.message)
+        miniToastr.error('Unable to save user.', err.message)
       }
     },
     async deleteItem(id) {
@@ -137,7 +137,7 @@ export default {
         await http.delete(`/users/${id}`)
         this.refresh()
       } catch(err) {
-        this.$toast(err.message)
+        miniToastr.error('Unable to remove user.', err.message)
       }
     }
   },
@@ -151,6 +151,9 @@ export default {
     },
     filteredData () {
       return filterRows(this.tableData, this.searchText)
+    },
+    hasInput() {
+      return this.input.fname.length > 0 || this.input.lname.length > 0 || this.input.username.length > 0
     }
   },
 

@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
-import Toast from 'vue-easy-toast'
+import miniToastr from 'mini-toastr'
 
-Vue.use(Toast)
 Vue.use(Vuelidate)
+
+miniToastr.init()
 
 import App from './App'
 
