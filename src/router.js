@@ -7,14 +7,34 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   linkActiveClass: 'active',
-  routes: [
-    { path: '/', component: require('./components/Home.vue') },
-    { path: '/databinding', component: require('./components/DataBinding.vue') },
-    { path: '/grid', component: require('./components/Grid.vue') },
-    { path: '/form', component: require('./components/Form.vue') },
-    { path: '/statemanagement', component: require('./components/StateManagement.vue') },
-    { path: '/jquery', component: require('./components/Jquery.vue') },
-    { path: '/modal', component: require('./components/Modal.vue') },
+  routes: [{
+      path: '/',
+      component: require('./components/Home.vue')
+    },
+    {
+      path: '/databinding',
+      component: require('./components/DataBinding.vue')
+    },
+    {
+      path: '/grid',
+      component: require('./components/Grid.vue')
+    },
+    {
+      path: '/form',
+      component: require('./components/Form.vue')
+    },
+    {
+      path: '/statemanagement',
+      component: require('./components/StateManagement.vue')
+    },
+    {
+      path: '/jquery',
+      component: require('./components/Jquery.vue')
+    },
+    {
+      path: '/modal',
+      component: require('./components/Modal.vue')
+    },
     {
       path: '/secureroute',
       component: require('./components/SecureRoute.vue'),

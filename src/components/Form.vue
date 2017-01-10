@@ -36,17 +36,13 @@ export default {
     username: '',
     name: '',
     email: '',
-    age: 0
+    age: ''
   }),
   methods: {
     save() {
-      if (this.$v.$invalid === true)
-        return
+      if (this.$v.$invalid === true) return
       alert('Saved!')
-      this.username = ''
-      this.name = ''
-      this.email = ''
-      this.age = ''
+      this.username = this.name = this.email = this.age = ''
       this.$v.$reset()
     }
   },
@@ -56,8 +52,7 @@ export default {
     username: {
       required,
       async isUnique (username)  {
-        if (username === '')
-          return true
+        if (username === '') return true
         let { data } = await http.get(`/users?username=${this.username}`)
         return !(data.length > 0)
       }
