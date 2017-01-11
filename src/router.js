@@ -9,39 +9,43 @@ const router = new VueRouter({
   linkActiveClass: 'active',
   routes: [{
       path: '/',
-      component: require('./components/Home.vue')
+      component: require('./components/Home')
     },
     {
       path: '/databinding',
-      component: require('./components/DataBinding.vue')
+      component: require('./components/DataBinding')
     },
     {
       path: '/grid',
-      component: require('./components/Grid.vue')
+      component: require('./components/Grid')
     },
     {
       path: '/form',
-      component: require('./components/Form.vue')
+      component: require('./components/Form')
     },
     {
       path: '/statemanagement',
-      component: require('./components/StateManagement.vue')
+      component: require('./components/StateManagement')
     },
     {
       path: '/jquery',
-      component: require('./components/Jquery.vue')
+      component: require('./components/Jquery')
     },
     {
       path: '/modal',
-      component: require('./components/Modal.vue')
+      component: require('./components/Modal')
     },
     {
       path: '/secureroute',
-      component: require('./components/SecureRoute.vue'),
+      component: require('./components/SecureRoute'),
       meta: {
         peopleWithAccess: ['David']
       }
     },
+    {
+      path: '/lazyroute',
+      component: resolve => require(['./components/LazyRoute'], resolve)
+    }
   ]
 })
 

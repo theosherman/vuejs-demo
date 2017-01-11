@@ -8,4 +8,5 @@
   router-link.list-group-item(to="/jquery") JQuery Integration
   router-link.list-group-item(to="/modal") Modal
   router-link.list-group-item(to="/secureroute") Secure Route
+  router-link.list-group-item(to="/lazyroute") Lazy Route
 </template>
