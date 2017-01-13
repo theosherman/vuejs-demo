@@ -19,9 +19,11 @@ import $ from 'jquery'
 import 'select2'
 
 export default {
+
   data: () => ({
     selection: ''
   }),
+
   mounted() {
     const control = $('#control');
     control.select2();
@@ -30,6 +32,7 @@ export default {
     })
     this.selection = control[0].value;
   }
+  
 }
 </script>
 

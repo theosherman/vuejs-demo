@@ -17,10 +17,12 @@ nav.navbar.navbar-inverse
 import { mapState } from 'vuex'
 
 export default {
+
   computed: {
     ...mapState('auth', {
       displayName: state => state.displayName
     })
   }
+  
 }
 </script>

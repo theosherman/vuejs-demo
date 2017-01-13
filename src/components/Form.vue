@@ -32,12 +32,14 @@ import http from '../http'
 import { required, email, minLength, between } from 'vuelidate/lib/validators'
 
 export default {
+
   data: () => ({
     username: '',
     name: '',
     email: '',
     age: ''
   }),
+
   methods: {
     save() {
       if (this.$v.$invalid === true) return
@@ -46,6 +48,7 @@ export default {
       this.$v.$reset()
     }
   },
+
   validations: {
     name: { required, minLength: minLength(4) },
     age: { isAdult: (age) => age >= 18, notTooOld: (age) => age < 120 },
@@ -59,6 +62,7 @@ export default {
     },
     email: { required, email }
   }
+  
 }
 
 </script>
