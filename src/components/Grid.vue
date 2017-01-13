@@ -67,21 +67,8 @@ div
 
 <script>
 import http from '../http'
+import _ from 'lodash'
 import miniToastr from 'mini-toastr'
-
-function paginateRows (data, pageNum) {
-  return data
-}
-
-function sortRows (data, sortColumn) {
-  return data
-}
-
-function filterRows (data, searchText) {
-  return data
-  // searchText = searchText.toLowerCase()
-  // return data.filter(obj => Object.keys(obj).some(key => obj[key].toLowerCase().includes(searchText)))
-}
 
 export default {
 
@@ -94,7 +81,8 @@ export default {
       lname: '',
       username: ''
     },
-    pageNum: 0,
+    pageNum: 1,
+    perPage: 3,
     tableData: []
   }),
 
@@ -144,13 +132,18 @@ export default {
 
   computed: {
     paginatedData () {
-      return paginateRows(this.sortedData, this.pageNum)
+	    const start = (this.pageNum - 1) * this.perPage
+      const end = start + this.perPage
+	    return _.slice(this.sortedData, start, end)
     },
     sortedData () {
-      return sortRows(this.filteredData, this.sortColumn)
+      return _.sortBy(this.filteredData, this.sortColumn)
     },
     filteredData () {
-      return filterRows(this.tableData, this.searchText)
+      let a = _.filter(this.tableData, (item) => {
+          return _.includes(item, this.searchText) || _.includes(item, Number(this.searchText))
+      })
+      return a
     },
     hasInput() {
       return this.input.fname.length > 0 || this.input.lname.length > 0 || this.input.username.length > 0
