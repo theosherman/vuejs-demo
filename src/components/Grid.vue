@@ -4,9 +4,9 @@ div
   hr
 
   .row
-    .col-md-4
-      input.form-control.input-sm(type='text', v-model='searchText', placeholder='Search')
-    .col-md-8
+    .col-xs-8.col-sm-4
+      input.form-control.input-sm(type='text', v-on:keyup='search', placeholder='Search')
+    .col-xs-4.col-sm-8
       div.pull-right
         button.btn.btn-default.btn-sm(@click="edit = !edit")
           i.fa.fa-pencil
@@ -14,10 +14,10 @@ div
   table.table
     thead
       tr
-        th ID
-        th First Name
-        th Last Name
-        th Username
+        th(@click="sortBy('id')") ID {{ sortValue('id') }}
+        th(@click="sortBy('fname')") First Name {{ sortValue('fname')}}
+        th(@click="sortBy('lname')") Last Name {{ sortValue('lname')}}
+        th(@click="sortBy('username')") Username {{ sortValue('username')}}
         th(v-if="edit")
     tbody
       tr(v-for='x in paginatedData')
@@ -63,6 +63,15 @@ div
         td
           input.form-control.input-sm(type='text', v-model='input.username', placeholder='Username')
         td
+
+  nav.pull-right
+    ul.pagination
+      li
+        a(@click="decrementPage") &laquo;
+      li(v-for="i in pages", :class="{'active': pageNum === i}")
+        a(@click="pageNum = i") {{ i }}
+      li
+        a(@click="incrementPage") &raquo;
 </template>
 
 <script>
@@ -75,6 +84,7 @@ export default {
   data: () => ({
     searchText: '',
     sortColumn: 'fname',
+    sortDirection: 'asc',
     edit: false,
     input: {
       fname: '',
@@ -95,6 +105,34 @@ export default {
         miniToastr.error('Unable to fetch table data.', err.message)
       }
     },
+
+    search: _.debounce(function(e) {
+        this.searchText = e.target.value
+    }, 300),
+
+    sortBy(column) {
+      if (this.sortColumn === column)
+        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
+      else
+        this.sortColumn = column
+    },
+
+    sortValue(column) {
+      if (this.sortColumn === column)
+        return this.sortDirection === 'asc' ? "↓" : "↑"
+      return ""
+    },
+
+    incrementPage() {
+      if (this.pageNum < this.pages)
+        this.pageNum++
+    },
+
+    decrementPage() {
+      if (this.pageNum > 1)
+        this.pageNum--
+    },
+
     toggleEdit(item) {
       if (!item.edit) {
         this.$set(item, 'edit')
@@ -102,6 +140,7 @@ export default {
       }
       item.edit = !item.edit
     },
+
     async addItem() {
       try {
         await http.post('/users', this.input)
@@ -111,6 +150,7 @@ export default {
         miniToastr.error('Unable to save user.', err.message)
       }
     },
+
     async updateItem(item) {
       try {
         this.$delete(item, 'edit')
@@ -120,6 +160,7 @@ export default {
         miniToastr.error('Unable to save user.', err.message)
       }
     },
+
     async deleteItem(id) {
       try {
         await http.delete(`/users/${id}`)
@@ -131,22 +172,41 @@ export default {
   },
 
   computed: {
+    filteredData () {
+      if (this.searchText === "")
+        return this.tableData
+      
+      return _.filter(this.tableData, (item) => {
+          const searchText = _.toLower(this.searchText)
+          let match = false
+          _.forOwn(item, (value) => {
+            if (_.isString(value) && _.toLower(value).indexOf(searchText) !== -1)
+              match = true
+            if (_.isNumber(value) && value === Number(searchText))
+              match = true
+            if (match)
+              return
+          })
+          return match
+      })
+    },
+
+    sortedData () {
+      return _.orderBy(this.filteredData, this.sortColumn, this.sortDirection)
+    },
+
     paginatedData () {
 	    const start = (this.pageNum - 1) * this.perPage
       const end = start + this.perPage
 	    return _.slice(this.sortedData, start, end)
     },
-    sortedData () {
-      return _.sortBy(this.filteredData, this.sortColumn)
-    },
-    filteredData () {
-      let a = _.filter(this.tableData, (item) => {
-          return _.includes(item, this.searchText) || _.includes(item, Number(this.searchText))
-      })
-      return a
-    },
+
     hasInput() {
       return this.input.fname.length > 0 || this.input.lname.length > 0 || this.input.username.length > 0
+    },
+
+    pages() {
+      return _.ceil(this.filteredData.length / this.perPage)
     }
   },
 
