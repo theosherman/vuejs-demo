@@ -35,6 +35,12 @@
       "fname": "Luke",
       "lname": "Irvin",
       "username": "lirvin"
+    },
+    {
+      "fname": "David",
+      "lname": "Driver",
+      "username": "ddriver",
+      "id": 7
     }
   ]
 }
