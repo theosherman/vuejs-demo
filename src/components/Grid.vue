@@ -38,9 +38,11 @@ div
           .pull-right
             button.btn.btn-xs.btn-warning.button-spacing(@click="toggleEdit(x)", v-if="!x.edit")
               i.fa.fa-pencil
+            button.btn.btn-xs.btn-warning.button-spacing(@click="cancelEdit(x)", v-if="x.edit")
+              i.fa.fa-ban
             button.btn.btn-xs.btn-success.button-spacing(@click="updateItem(x)", v-if="x.edit")
               i.fa.fa-save
-            button.btn.btn-xs.btn-danger.button-spacing(@click="deleteItem(x.id)")
+            button.btn.btn-xs.btn-danger.button-spacing(@click="deleteItem(x.id)", v-if="!x.edit")
               i.fa.fa-trash
             
       tr(v-if='edit && hasInput')
@@ -139,6 +141,10 @@ export default {
         item.edit = false
       }
       item.edit = !item.edit
+    },
+
+    async cancelEdit(item) {
+      await this.refresh()
     },
 
     async addItem() {
