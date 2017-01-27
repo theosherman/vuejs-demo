@@ -6,9 +6,9 @@ div
 
   ul.nav.nav-pills
     router-link(to="/grid/localdata", role="presentation", tag="li")
-      a(href="#") Local Data
+      a Local Data
     router-link(to="/grid/serverdata", role="presentation", tag="li")
-      a(href="#") Server Data
+      a Server Data
 
   #wrapper
     router-view
