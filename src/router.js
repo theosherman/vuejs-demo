@@ -17,7 +17,17 @@ const router = new VueRouter({
     },
     {
       path: '/grid',
-      component: require('./components/Grid')
+      component: require('./components/Grid'),
+      children: [
+        {
+          path: '/grid/localdata',
+          component: require('./components/GridLocalData')
+        },
+        {
+          path: '/grid/serverdata',
+          component: require('./components/GridServerData')
+        }
+      ]
     },
     {
       path: '/form',
