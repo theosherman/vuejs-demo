@@ -44,7 +44,7 @@ div
               i.fa.fa-save
             button.btn.btn-xs.btn-danger.button-spacing(@click="deleteItem(x.id)", v-if="!x.edit")
               i.fa.fa-trash
-            
+
       tr(v-if='edit && hasInput')
         td
           i.fa.fa-plus
@@ -181,7 +181,7 @@ export default {
     filteredData () {
       if (this.searchText === "")
         return this.tableData
-      
+
       return _.filter(this.tableData, (item) => {
           const searchText = _.toLower(this.searchText)
           let match = false
@@ -226,5 +226,9 @@ export default {
 <style lang="css">
   .button-spacing {
     margin-left: 2px;
+  }
+
+  th, .pagination li a {
+    cursor: pointer;
   }
 </style>
