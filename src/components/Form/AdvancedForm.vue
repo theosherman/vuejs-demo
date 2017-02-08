@@ -4,7 +4,8 @@ include ../../FormHelpers.pug
 .row
   .col-md-6
     h3
-      | List of lists
+      | Advanced Form&nbsp;
+      small List of lists
       button.btn.btn-default.pull-right(@click='addPerson()')
           i.fa.fa-plus
           | &nbsp;&nbsp;
