@@ -1,7 +1,7 @@
 mixin textbox(label, binding, inputType)
   .form-group(:class="{ 'has-error': $v." + binding + ".$error }")
-    label.control-label.col-sm-2(for=binding)= label
-    .col-sm-10
+    label.control-label.col-sm-4(for=binding)= label
+    .col-sm-8
       input.form-control(type=inputType ? inputType : 'text', v-model.trim=binding, id=binding, @input='$v.' + binding + '.$touch()', placeholder=label)
 
 mixin validation(binding, validation, message)

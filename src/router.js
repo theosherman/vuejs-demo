@@ -31,7 +31,7 @@ const router = new VueRouter({
     },
     {
       path: '/form',
-      component: require('./components/Form')
+      component: require('./components/Form/Form')
     },
     {
       path: '/statemanagement',
