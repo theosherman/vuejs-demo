@@ -3,9 +3,10 @@ nav.navbar.navbar-inverse
   .container
     
     .navbar-header
-      a.navbar-brand(href="#")
-        i.fa.fa-rocket
-        | &nbsp;&nbsp;Vue.JS Demo
+      #navicon.span.fa-stack.fa-lg
+          i.fa.fa-circle.fa-stack-2x.fa-inverse
+          i.fa.fa-rocket.fa-stack-1x(style="color: #bbb")
+      a.navbar-brand(href="#") Vue.JS Demo
 
     .navbar-right
       p.navbar-text
@@ -26,3 +27,10 @@ export default {
   
 }
 </script>
+
+<style>
+#navicon {
+  float: left;
+  margin: 6px 10px 0 0;
+}
+</style>
