@@ -15,7 +15,7 @@ include ../../FormHelpers.pug
 
       div(v-for="(person, i) in form.people")
         hr
-        .form-group(:class="{ 'has-error': $v.form.people.$each[i].$error }")
+        .form-group(:class="{ 'has-error': $v.form.people.$each[i].name.$error }")
           input.form-control.input-lg(
               type='text',
               v-model.trim='person.name',
