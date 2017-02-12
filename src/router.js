@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import store from './store'
 import _ from 'lodash'
+import miniToastr from 'mini-toastr'
 
 Vue.use(VueRouter)
 
@@ -67,7 +68,7 @@ router.beforeEach((to, from, next) => {
     if (_.includes(meta.peopleWithAccess, name))
       next()
     else
-      alert('Permission denied. Go away!')
+      miniToastr.warn('Permission denied')
   } else {
     next()
   }
