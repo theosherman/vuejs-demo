@@ -61,7 +61,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const meta = _.first(to.matched).meta;
+  const meta = _.first(to.matched).meta
 
   if (meta.peopleWithAccess) {
     const name = store.state.auth.displayName
