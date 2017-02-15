@@ -10,12 +10,7 @@ div
 </template>
 
 <script>
-import router from './router'
-import store from './store'
-
 export default {
-  router,
-  store,
   name: 'app',
   components: {
     'navbar': require('./components/Navbar'),

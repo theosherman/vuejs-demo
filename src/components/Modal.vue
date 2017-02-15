@@ -21,6 +21,6 @@ div
 </template>
 
 <script>
-require('expose?jQuery!jquery');
+require('expose-loader?jQuery!jquery');
 require('bootstrap')
 </script>
