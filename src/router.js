@@ -32,7 +32,17 @@ const router = new VueRouter({
     },
     {
       path: '/form',
-      component: require('./components/Form/Form')
+      component: require('./components/Form/Form'),
+      children: [
+        {
+          path: '/form/basicform',
+          component: require('./components/Form/BasicForm')
+        },
+        {
+          path: '/form/advancedform',
+          component: require('./components/Form/AdvancedForm')
+        }
+      ]
     },
     {
       path: '/statemanagement',

@@ -13,8 +13,7 @@ include ../../FormHelpers.pug
           
     .form-horizontal
 
-      div(v-for="(person, i) in form.people")
-        hr
+      .well(v-for="(person, i) in form.people")
         .form-group(:class="{ 'has-error': $v.form.people.$each[i].name.$error }")
           input.form-control.input-lg(
               type='text',
@@ -24,16 +23,30 @@ include ../../FormHelpers.pug
               )
 
         h4 Phone numbers...
-        button.btn.btn-default(@click='addPhoneNumber(person)')
-          i.fa.fa-plus
-        div(v-for="(phoneNumber, j) in person.phoneNumbers")
-          .form-group(:class="{ 'has-error': $v.form.people.$each[i].phoneNumbers.$each[j].$error }")
-            input.form-control.input-sm(
-                type='text',
-                v-model.trim='phoneNumber.phoneNumber',
-                @input='$v.form.people.$each[i].phoneNumbers.$each[j].phoneNumber.$touch()',
-                :placeholder="'Phone number ' + (j + 1) + ' for ' + person.name"
-                )
+          button.btn.btn-sm.btn-default.pull-right(@click='addPhoneNumber(person)', style="margin-top: -6px")
+            i.fa.fa-plus
+        .row(v-for="(phoneNumber, j) in person.phoneNumbers")
+          .col-md-2
+            .btn.btn-danger.btn-sm.pull-right(@click="removePhoneNumber(person, j)")
+              i.fa.fa-trash
+          .col-md-5
+            .form-group(:class="{ 'has-error': $v.form.people.$each[i].phoneNumbers.$each[j].phoneNumber.$error }")
+              masked-input.form-control.input-sm(
+                  v-model='phoneNumber.phoneNumber',
+                  mask="(111) 111-1111",
+                  :placeholder="'Phone number ' + (j + 1) + ' for ' + person.name"
+                  )
+          .col-md-5
+            .form-group(:class="{ 'has-error': $v.form.people.$each[i].phoneNumbers.$each[j].type.$error }")
+              select.form-control.input-sm(v-model="phoneNumber.type")
+                option Home
+                option Mobile
+                option Fax
+      
+      button.btn.btn-primary.pull-right(@click="save()")
+        i.fa.fa-floppy-o
+        | &nbsp;Save
+            
 
   .col-md-6
     pre
@@ -43,8 +56,13 @@ include ../../FormHelpers.pug
 </template>
 
 <script>
+import Vue from 'vue'
 import http from '../../http'
 import { required, email, minLength, between } from 'vuelidate/lib/validators'
+
+function phone(value) {
+  
+}
 
 export default {
 
@@ -54,26 +72,38 @@ export default {
         {
           name: 'David',
           phoneNumbers: [
-            { phoneNumber: '123-456-7890', type: 'Home' },
-            { phoneNumber: '425-211-6878', type: 'Mobile' }
+            { phoneNumber: '1234567890', type: 'Home' },
+            { phoneNumber: '4252116878', type: 'Mobile' }
           ]
         }
       ]
-    }
+    },
+    typeOptions: [
+      'Home',
+      'Work',
+      'Mobile',
+      'Fax',
+      'Other'
+    ]
     
   }),
 
   methods: {
     save() {
+      this.$v.$touch()
       if (this.$v.$invalid === true) return
       alert('Saved!')
-      this.form.$v.$reset()
+      this.form.people = []
+      this.$v.$reset()
     },
     addPerson() {
       this.form.people.push({ name: '', phoneNumbers: [] })
     },
     addPhoneNumber(person) {
       person.phoneNumbers.push({ phoneNumber: '', type: '' })
+    },
+    removePhoneNumber(person, index) {
+      person.phoneNumbers.splice(index, 1)
     }
   },
 
@@ -84,12 +114,17 @@ export default {
           name: { required, minLength: minLength(4) },
           phoneNumbers: {
             $each: {
-              phoneNumber: { required }
+              phoneNumber: { required },
+              type: { required }
             }
           }
         }
       }
     }
+  },
+
+  components: {
+    'masked-input': require('vue-masked-input')
   }
   
 }

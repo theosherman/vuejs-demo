@@ -1,25 +1,22 @@
 <template lang="pug">
 div
   h1 Form
+
   hr
-  basic-form
-  hr
-  advanced-form
+
+  ul.nav.nav-pills
+    router-link(to="/form/basicform", role="presentation", tag="li")
+      a Basic Form
+    router-link(to="/form/advancedform", role="presentation", tag="li")
+      a Advanced Form
+
+  #wrapper
+    router-view
+
 </template>
 
-<script>
-export default {
-  components: {
-    'basic-form': require('./BasicForm'),
-    'advanced-form': require('./AdvancedForm')
+<style lang="css" scoped>
+  #wrapper {
+    margin-top: 2em;
   }
-}
-</script>
-
-<style lang="css">
-.validation-message {
-  color: #a94442;
-  margin-top: -16px;
-  font-size: .85em;
-}
 </style>

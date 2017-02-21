@@ -5,7 +5,7 @@ mixin textbox(label, binding, inputType)
       input.form-control(type=inputType ? inputType : 'text', v-model.trim=binding, id=binding, @input='$v.' + binding + '.$touch()', placeholder=label)
 
 mixin validation(binding, validation, message)
-  .col-sm-10.col-sm-offset-2.validation-message(v-show=("!$v." + binding + "." + validation + " && $v." + binding + ".$error === true"))= message
+  .col-sm-8.col-sm-offset-4.validation-message(v-show=("!$v." + binding + "." + validation + " && $v." + binding + ".$error === true"))= message
 
 mixin button(label, clickAction, buttonType)
   button.btn(class="btn-" + (buttonType ? buttonType : "default"), @click=clickAction)&attributes(attributes)= label

@@ -17,6 +17,7 @@
     "mini-toastr": "^0.3.10",
     "select2": "^4.0.3",
     "vue": "^2.1.10",
+    "vue-masked-input": "^0.3.5",
     "vue-router": "^2.2.0",
     "vuelidate": "^0.2.0",
     "vuex": "^2.1.1"
