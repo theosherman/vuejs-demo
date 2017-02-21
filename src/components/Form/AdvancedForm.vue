@@ -39,9 +39,7 @@ include ../../FormHelpers.pug
           .col-md-5
             .form-group(:class="{ 'has-error': $v.form.people.$each[i].phoneNumbers.$each[j].type.$error }")
               select.form-control.input-sm(v-model="phoneNumber.type")
-                option Home
-                option Mobile
-                option Fax
+                option(v-for="option in typeOptions") {{ option }}
       
       button.btn.btn-primary.pull-right(@click="save()")
         i.fa.fa-floppy-o
