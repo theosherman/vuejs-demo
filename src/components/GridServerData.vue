@@ -18,7 +18,7 @@ div
         th(@click="sortBy('username')") Username {{ sortValue('username')}}
         th(v-if="edit")
     tbody
-      tr(v-for='x in paginatedData')
+      tr(v-for='x in tableData')
         td {{ x.id }}
         td
           span(v-if="!x.edit") {{ x.fname }}
@@ -84,7 +84,7 @@ export default {
   data: () => ({
     searchText: '',
     sortColumn: 'fname',
-    sortDirection: 'asc',
+    sortDirection: 'ASC',
     edit: false,
     input: {
       fname: '',
@@ -93,14 +93,26 @@ export default {
     },
     pageNum: 1,
     perPage: 3,
+    totalCount: 0,
     tableData: []
   }),
 
   methods: {
     async refresh() {
+      const { data, totalCount } = await this.getData(this.sortColumn, this.sortDirection, this.pageNum, this.perPage, this.searchText)
+      this.tableData = data
+      this.totalCount = totalCount
+    },
+
+    async getData(sortColumn, sortDirection, pageNum, perPage, searchText) {
       try {
-        const { data } = await http.get('/users')
-        this.tableData = data
+        let path = '/users?_sort=' + sortColumn + '&_order=' + sortDirection + '&_page=' + pageNum + '&_limit=' + perPage
+        if (searchText)
+          path += '&q=' + searchText
+
+        const response = await http.get(path)
+
+        return { data: response.data, totalCount: response.headers['x-total-count'] }
       } catch(err) {
         miniToastr.error('Unable to fetch table data.', err.message)
       }
@@ -112,14 +124,14 @@ export default {
 
     sortBy(column) {
       if (this.sortColumn === column)
-        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
+        this.sortDirection = this.sortDirection === 'ASC' ? 'DESC' : 'ASC'
       else
         this.sortColumn = column
     },
 
     sortValue(column) {
       if (this.sortColumn === column)
-        return this.sortDirection === 'asc' ? "↓" : "↑"
+        return this.sortDirection === 'ASC' ? "↓" : "↑"
       return ""
     },
 
@@ -175,46 +187,36 @@ export default {
     }
   },
 
+  watch: {
+    sortColumn() {
+      this.refresh()
+    },
+    sortDirection() {
+      this.refresh()
+    },
+    pageNum() {
+      this.refresh()
+    },
+    perPage() {
+      this.refresh()
+    },
+    searchText() {
+      this.refresh()
+    }
+  },
+
   computed: {
-    filteredData () {
-      if (this.searchText === "")
-        return this.tableData
-
-      return _.filter(this.tableData, (item) => {
-          const searchText = _.toLower(this.searchText)
-          let match = false
-          _.forOwn(item, (value) => {
-            if (_.isString(value) && _.toLower(value).indexOf(searchText) !== -1)
-              match = true
-            if (_.isNumber(value) && value === Number(searchText))
-              match = true
-            if (match)
-              return
-          })
-          return match
-      })
-    },
-
-    sortedData () {
-      return _.orderBy(this.filteredData, this.sortColumn, this.sortDirection)
-    },
-
-    paginatedData () {
-	    const start = (this.pageNum - 1) * this.perPage
-      const end = start + this.perPage
-	    return _.slice(this.sortedData, start, end)
-    },
 
     hasInput() {
       return this.input.fname.length > 0 || this.input.lname.length > 0 || this.input.username.length > 0
     },
 
     pages() {
-      return _.ceil(this.filteredData.length / this.perPage)
+      return _.ceil(this.totalCount / this.perPage)
     }
   },
 
-  mounted () {
+  mounted() {
     this.refresh()
   }
 
