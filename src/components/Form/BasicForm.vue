@@ -35,7 +35,7 @@ include ../../FormHelpers.pug
 
 <script>
 import http from '../../http'
-import { required, email, minLength, between } from 'vuelidate/lib/validators'
+import { required, email, minLength, between } from 'vuelidate/src/validators'
 
 export default {
 
