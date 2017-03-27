@@ -34,14 +34,14 @@ include ../../FormHelpers.pug
         .row(v-for="(phoneNumber, j) in contact.phoneNumbers")
 
           .col-md-5
-            .form-group(:class="{ 'has-error': $v.form.people.$each[i].phoneNumbers.$each[j].phoneNumber.$error }")
+            .form-group(:class="{ 'has-error': $v.form.contacts.$each[i].phoneNumbers.$each[j].phoneNumber.$error }")
               masked-input.form-control.input-sm(
                   v-model='phoneNumber.phoneNumber',
                   mask="(111) 111-1111",
                   :placeholder="'Phone number ' + (j + 1) + ' for ' + contact.name")
 
           .col-md-5
-            .form-group(:class="{ 'has-error': $v.form.people.$each[i].phoneNumbers.$each[j].type.$error }")
+            .form-group
               select.form-control.input-sm(v-model="phoneNumber.type")
                 option(v-for="option in typeOptions") {{ option }}
 
@@ -64,7 +64,7 @@ include ../../FormHelpers.pug
 <script>
 import Vue from 'vue'
 import http from '../../http'
-import { required, email, minLength, between } from 'vuelidate/src/validators'
+import { required, email, minLength, between } from 'vuelidate/lib/validators'
 
 function phone(value) {
   

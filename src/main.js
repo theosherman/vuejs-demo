@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Vuelidate from 'vuelidate/dist/vuelidate.min.js'
+import Vuelidate from 'vuelidate'
 import miniToastr from 'mini-toastr'
 
 Vue.use(Vuelidate)
