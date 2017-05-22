@@ -22,17 +22,21 @@ const router = new VueRouter({
       children: [
         {
           path: '/grid/localdata',
-          component: require('./components/GridLocalData')
+          component: require('./components/Grid/LocalData')
         },
         {
           path: '/grid/serverdata',
-          component: require('./components/GridServerData')
+          component: require('./components/Grid/ServerData')
+        },
+        {
+          path: '/grid/vuetables2client',
+          component: require('./components/Grid/VueTables2Client')
         }
       ]
     },
     {
       path: '/form',
-      component: require('./components/Form/Form'),
+      component: require('./components/Form'),
       children: [
         {
           path: '/form/basicform',

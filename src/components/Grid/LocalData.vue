@@ -18,7 +18,7 @@ div
         th(@click="sortBy('username')") Username {{ sortValue('username')}}
         th(v-if="edit")
     tbody
-      tr(v-for='x in tableData')
+      tr(v-for='x in paginatedData')
         td {{ x.id }}
         td
           span(v-if="!x.edit") {{ x.fname }}
@@ -64,18 +64,24 @@ div
           input.form-control.input-sm(type='text', v-model='input.username', placeholder='Username')
         td
 
-  nav.pull-right
-    ul.pagination
-      li
-        a(@click="decrementPage") &laquo;
-      li(v-for="i in pages", :class="{'active': pageNum === i}")
-        a(@click="pageNum = i") {{ i }}
-      li
-        a(@click="incrementPage") &raquo;
+  
+
+  .row
+    .col-md-6
+      p {{ tableData.length }} Records
+    .col-md-6
+      nav.pull-right
+        ul.pagination
+          li
+            a(@click="decrementPage") &laquo;
+          li(v-for="i in pages", :class="{'active': pageNum === i}")
+            a(@click="pageNum = i") {{ i }}
+          li
+            a(@click="incrementPage") &raquo;
 </template>
 
 <script>
-import http from '../http'
+import http from 'src/http'
 import _ from 'lodash'
 import miniToastr from 'mini-toastr'
 
@@ -84,7 +90,7 @@ export default {
   data: () => ({
     searchText: '',
     sortColumn: 'fname',
-    sortDirection: 'ASC',
+    sortDirection: 'asc',
     edit: false,
     input: {
       fname: '',
@@ -93,26 +99,14 @@ export default {
     },
     pageNum: 1,
     perPage: 3,
-    totalCount: 0,
     tableData: []
   }),
 
   methods: {
     async refresh() {
-      const { data, totalCount } = await this.getData(this.sortColumn, this.sortDirection, this.pageNum, this.perPage, this.searchText)
-      this.tableData = data
-      this.totalCount = totalCount
-    },
-
-    async getData(sortColumn, sortDirection, pageNum, perPage, searchText) {
       try {
-        let path = '/users?_sort=' + sortColumn + '&_order=' + sortDirection + '&_page=' + pageNum + '&_limit=' + perPage
-        if (searchText)
-          path += '&q=' + searchText
-
-        const response = await http.get(path)
-
-        return { data: response.data, totalCount: response.headers['x-total-count'] }
+        const { data } = await http.get('/users')
+        this.tableData = data
       } catch(err) {
         miniToastr.error('Unable to fetch table data.', err.message)
       }
@@ -124,14 +118,14 @@ export default {
 
     sortBy(column) {
       if (this.sortColumn === column)
-        this.sortDirection = this.sortDirection === 'ASC' ? 'DESC' : 'ASC'
+        this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc'
       else
         this.sortColumn = column
     },
 
     sortValue(column) {
       if (this.sortColumn === column)
-        return this.sortDirection === 'ASC' ? "↓" : "↑"
+        return this.sortDirection === 'asc' ? "↓" : "↑"
       return ""
     },
 
@@ -187,36 +181,46 @@ export default {
     }
   },
 
-  watch: {
-    sortColumn() {
-      this.refresh()
-    },
-    sortDirection() {
-      this.refresh()
-    },
-    pageNum() {
-      this.refresh()
-    },
-    perPage() {
-      this.refresh()
-    },
-    searchText() {
-      this.refresh()
-    }
-  },
-
   computed: {
+    filteredData () {
+      if (this.searchText === "")
+        return this.tableData
+
+      return _.filter(this.tableData, (item) => {
+          const searchText = _.toLower(this.searchText)
+          let match = false
+          _.forOwn(item, (value) => {
+            if (_.isString(value) && _.toLower(value).indexOf(searchText) !== -1)
+              match = true
+            if (_.isNumber(value) && value === Number(searchText))
+              match = true
+            if (match)
+              return
+          })
+          return match
+      })
+    },
+
+    sortedData () {
+      return _.orderBy(this.filteredData, this.sortColumn, this.sortDirection)
+    },
+
+    paginatedData () {
+	    const start = (this.pageNum - 1) * this.perPage
+      const end = start + this.perPage
+	    return _.slice(this.sortedData, start, end)
+    },
 
     hasInput() {
       return this.input.fname.length > 0 || this.input.lname.length > 0 || this.input.username.length > 0
     },
 
     pages() {
-      return _.ceil(this.totalCount / this.perPage)
+      return _.ceil(this.filteredData.length / this.perPage)
     }
   },
 
-  mounted() {
+  mounted () {
     this.refresh()
   }
 
@@ -230,5 +234,9 @@ export default {
 
   th, .pagination li a {
     cursor: pointer;
+  }
+
+  .pagination {
+    margin: 0;
   }
 </style>

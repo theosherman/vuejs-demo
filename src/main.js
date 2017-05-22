@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import miniToastr from 'mini-toastr'
+import { ServerTable, ClientTable, Event } from 'vue-tables-2'
 
 Vue.use(Vuelidate)
+Vue.use(ClientTable, {}, false)
 
 miniToastr.init()
 

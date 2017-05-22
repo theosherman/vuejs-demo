@@ -14,7 +14,7 @@ export default {
   name: 'app',
   components: {
     'navbar': require('./components/Navbar'),
-    'side-nav': require('./components/SideNav.vue')
+    'side-nav': require('./components/SideNav')
   }
 }
 </script>

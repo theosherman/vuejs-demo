@@ -66,10 +66,6 @@ import Vue from 'vue'
 import http from '../../http'
 import { required, email, minLength, between } from 'vuelidate/lib/validators'
 
-function phone(value) {
-  
-}
-
 export default {
 
   data: () => ({
