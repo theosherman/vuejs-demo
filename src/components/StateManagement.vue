@@ -11,6 +11,8 @@ div
           button.btn.btn-success(@click="setDisplayName(nameInput)")
             i.fa.fa-save
             | &nbsp;Save
+      
+      h2 displayName: {{ $store.state.auth.displayName }}
 
     .col-md-6
       pre {{ $store.state }}
